@@ -1,20 +1,25 @@
 <script lang="ts">
-	import { getStarSign, isValidDate, parseDateParts } from '$lib/starSign';
+	import { getStarSign, isValidDate, parseBirthDate } from '$lib/starSign';
 
-	let day = $state('');
-	let month = $state('');
-	let year = $state('');
+	let birthDate = $state('');
 	let result = $state('');
 
+	const maxDate = new Date().toISOString().slice(0, 10);
+
 	function check() {
-		const parts = parseDateParts(day, month, year);
+		if (!birthDate) {
+			result = 'Please select your date of birth.';
+			return;
+		}
+
+		const parts = parseBirthDate(birthDate);
 		if (!parts) {
-			result = 'Please enter a valid day, month, and year.';
+			result = 'Please select a valid date of birth.';
 			return;
 		}
 
 		if (!isValidDate(parts.month, parts.day, parts.year)) {
-			result = 'That date is not valid. Check your day, month, and year.';
+			result = 'That date is not valid. Please choose another date.';
 			return;
 		}
 
@@ -38,20 +43,10 @@
 			check();
 		}}
 	>
-		<div class="fields">
-			<label>
-				<span>Day</span>
-				<input type="text" inputmode="numeric" placeholder="e.g. 15" bind:value={day} />
-			</label>
-			<label>
-				<span>Month</span>
-				<input type="text" inputmode="numeric" placeholder="e.g. 6" bind:value={month} />
-			</label>
-			<label>
-				<span>Year</span>
-				<input type="text" inputmode="numeric" placeholder="e.g. 1990" bind:value={year} />
-			</label>
-		</div>
+		<label class="date-field">
+			<span>Date of birth</span>
+			<input type="date" bind:value={birthDate} max={maxDate} required />
+		</label>
 
 		<button type="submit">Check</button>
 	</form>
@@ -87,13 +82,7 @@
 		gap: 1.25rem;
 	}
 
-	.fields {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 0.75rem;
-	}
-
-	label {
+	.date-field {
 		display: flex;
 		flex-direction: column;
 		gap: 0.35rem;
@@ -101,7 +90,7 @@
 		font-weight: 600;
 	}
 
-	label span {
+	.date-field span {
 		color: #4a4a68;
 	}
 
@@ -110,6 +99,7 @@
 		border: 1px solid #c8c8d8;
 		border-radius: 0.5rem;
 		font-size: 1rem;
+		font-family: inherit;
 	}
 
 	input:focus {

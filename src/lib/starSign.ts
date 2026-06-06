@@ -38,18 +38,16 @@ export function isValidDate(month: number, day: number, year: number): boolean {
 	);
 }
 
-export function parseDateParts(
-	dayText: string,
-	monthText: string,
-	yearText: string
-): { month: number; day: number; year: number } | null {
-	const day = Number.parseInt(dayText.trim(), 10);
-	const month = Number.parseInt(monthText.trim(), 10);
-	const year = Number.parseInt(yearText.trim(), 10);
-
-	if ([day, month, year].some((n) => Number.isNaN(n))) {
+/** Parse an HTML date input value (`YYYY-MM-DD`). */
+export function parseBirthDate(value: string): { month: number; day: number; year: number } | null {
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+	if (!match) {
 		return null;
 	}
+
+	const year = Number.parseInt(match[1], 10);
+	const month = Number.parseInt(match[2], 10);
+	const day = Number.parseInt(match[3], 10);
 
 	return { day, month, year };
 }
