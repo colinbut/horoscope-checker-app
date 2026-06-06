@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173), enter your day, month, and year, then click **Check**.
+Open [http://localhost:5173](http://localhost:5173), pick your date of birth, then click **Check**.
 
 ## Scripts
 
